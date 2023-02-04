@@ -26,6 +26,10 @@ const loadStore = () => {
     
 }
 
+const saveStateToLocalStorage = () => {
+    localStorage.setItem('state', JSON.stringify(state));
+}
+
 /**
  * Returns the ToDo array, depending on the filter option.
  * @param {Filters} filter Tipo de todos a obtener
@@ -53,6 +57,7 @@ const addTodo = ( description ) => {
     if (!description) throw new Error('Description needed');
     
     state.todos.push( new Todo(description));
+    saveStateToLocalStorage();
 }
 
 /**
@@ -62,6 +67,7 @@ const addTodo = ( description ) => {
 const toogleTodo = ( todoId ) => {
     let todoIndex = state.todos.findIndex((t) => (t.id === todoId) );
     state.todos[todoIndex].done = !state.todos[todoIndex].done;
+    saveStateToLocalStorage();
   }
   
 /**
@@ -70,6 +76,7 @@ const toogleTodo = ( todoId ) => {
  */
 const deleteTodo = ( todoId ) => {
     state.todos = state.todos.filter( todo => todo.id !== todoId );
+    saveStateToLocalStorage();
 }
 
 /**
@@ -77,6 +84,7 @@ const deleteTodo = ( todoId ) => {
  */
 const deleteCompleted = () => {
     state.todos = state.todos.filter( todo => todo.done );
+    saveStateToLocalStorage();
 }
 
 /**
