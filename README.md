@@ -8,4 +8,4 @@ Before everything, you must have npm installed in your system (check with npm --
 2. Navigate into the directory where the files are, and execute ```npm i``` to install all the dependencies.
 3. Use ```npm run dev``` to run locally in your device.
 
-Thanks to (Fernando Herrera)[https://github.com/Klerith] for helping and teaching me all the way to create this ToDo :)
+Thanks to [Fernando Herrera](https://github.com/Klerith) for helping and teaching me all the way to create this ToDo :)
