@@ -1,11 +1,13 @@
 import html from './app.html?raw';
-import todoStore from '../store/todo.store';
+import todoStore, {Filters} from '../store/todo.store';
 import { renderTodos } from './use-cases';
 
 
 const ElementIDs = {
     TodoList: '.todo-list',
-    NewTodoInput: '#new-todo-input'
+    NewTodoInput: '#new-todo-input',
+    ClearCompletedButton: '.clear-completed',
+    TodoFilters: '.filtro',
 }
 
 /**
@@ -28,7 +30,9 @@ export const App = ( elementId ) => {
 
     //Referencias HTML
     const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInput),
-          todoListUL          = document.querySelector(ElementIDs.TodoList);
+          todoListUL          = document.querySelector(ElementIDs.TodoList),
+          clearComplButton    = document.querySelector(ElementIDs.ClearCompletedButton),
+          filtersLIs          = document.querySelectorAll(ElementIDs.TodoFilters);
 
     newDescriptionInput.addEventListener('keyup', (event) => {
         if(event.keyCode !== 13) return;
@@ -49,5 +53,35 @@ export const App = ( elementId ) => {
         }
 
         displayTodos();
-    })
+    });
+    
+    clearComplButton.addEventListener('click', () =>{
+        todoStore.deleteCompleted();
+        displayTodos();
+    });
+
+    filtersLIs.forEach(element => {
+        element.addEventListener('click', (element) => {
+            filtersLIs.forEach(el => el.classList.remove('selected'));
+            element.target.classList.add('selected');
+            
+            switch (element.target.text) {
+                case 'Todos':
+                    todoStore.setFilter(Filters.All);
+                    break;
+                case 'Pendientes':
+                    todoStore.setFilter(Filters.Pending);
+                    break;
+                case 'Completados':
+                    todoStore.setFilter(Filters.Completed);
+                    break;
+            
+                default:
+                    throw new Error('WTF DUDE.');
+                    break;
+            }
+            displayTodos();
+        })
+    });
+
 }

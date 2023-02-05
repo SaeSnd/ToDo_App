@@ -1,6 +1,6 @@
 import { Todo } from '../todos/models/todo.model'
 
-const Filters = {
+export const Filters = {
     All: 'all',
     Completed: 'Completed',
     Pending: 'Pending'
@@ -8,9 +8,6 @@ const Filters = {
 
 const state = {
     todos: [
-        new Todo('Piedra del alma'),
-        new Todo('Piedra del infinito'),
-        new Todo('Piedra del tiempo'),
     ],
     filter: Filters.All
 }
@@ -20,10 +17,15 @@ const state = {
  */
 const initStore = () => {
     console.log(state);
+    loadStore();
 }
 
 const loadStore = () => {
-    
+    if(localStorage.getItem('state')){
+        const {todos = [], filter = Filters.All} = JSON.parse(localStorage.getItem('state'));
+        state.todos = todos;
+        state.filter = filter;
+    }
 }
 
 const saveStateToLocalStorage = () => {
@@ -83,7 +85,7 @@ const deleteTodo = ( todoId ) => {
  * Delete all the completed ToDo's
  */
 const deleteCompleted = () => {
-    state.todos = state.todos.filter( todo => todo.done );
+    state.todos = state.todos.filter( todo => !todo.done );
     saveStateToLocalStorage();
 }
 
@@ -92,9 +94,8 @@ const deleteCompleted = () => {
  * @param {String:Filters} newFilter Filters
  */
 const setFilter = ( newFilter = Filters.All ) => {
-    if( Object.keys(Filters).includes(newFilter) ){
-        state.filter = newFilter;
-    } else throw new Error(`${newFilter} no es una opcion valida`);
+    state.filter = newFilter;
+    saveStateToLocalStorage();
 }
 
 /**
