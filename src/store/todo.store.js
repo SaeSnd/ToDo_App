@@ -8,6 +8,9 @@ export const Filters = {
 
 const state = {
     todos: [
+        new Todo('Buy grosseries'),
+        new Todo('Go to GYM'),
+        new Todo('Eat healty')
     ],
     filter: Filters.All
 }

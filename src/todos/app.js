@@ -1,6 +1,6 @@
 import html from './app.html?raw';
 import todoStore, {Filters} from '../store/todo.store';
-import { renderTodos } from './use-cases';
+import { renderTodos, renderPending } from './use-cases';
 
 
 const ElementIDs = {
@@ -8,6 +8,7 @@ const ElementIDs = {
     NewTodoInput: '#new-todo-input',
     ClearCompletedButton: '.clear-completed',
     TodoFilters: '.filtro',
+    Counter: '.todo-count'
 }
 
 /**
@@ -19,6 +20,11 @@ export const App = ( elementId ) => {
     const displayTodos = () => {
         const todos = todoStore.getTodos( todoStore.getCurrentFilter() );
         renderTodos( ElementIDs.TodoList, todos );
+        updatePendingCount();
+    }
+
+    const updatePendingCount = () => {
+        renderPending(ElementIDs.Counter);
     }
 
     (() => {
@@ -28,11 +34,12 @@ export const App = ( elementId ) => {
         displayTodos();
     })();
 
-    //Referencias HTML
+    //HTML References
     const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInput),
           todoListUL          = document.querySelector(ElementIDs.TodoList),
           clearComplButton    = document.querySelector(ElementIDs.ClearCompletedButton),
-          filtersLIs          = document.querySelectorAll(ElementIDs.TodoFilters);
+          filtersLIs          = document.querySelectorAll(ElementIDs.TodoFilters),
+          counterNum          = document.querySelector(ElementIDs.Counter);
 
     newDescriptionInput.addEventListener('keyup', (event) => {
         if(event.keyCode !== 13) return;
@@ -66,13 +73,13 @@ export const App = ( elementId ) => {
             element.target.classList.add('selected');
             
             switch (element.target.text) {
-                case 'Todos':
+                case 'All':
                     todoStore.setFilter(Filters.All);
                     break;
-                case 'Pendientes':
+                case 'Pending':
                     todoStore.setFilter(Filters.Pending);
                     break;
-                case 'Completados':
+                case 'Completed':
                     todoStore.setFilter(Filters.Completed);
                     break;
             
